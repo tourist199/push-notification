@@ -1,4 +1,5 @@
 import firebase from "firebase/app";
+
 import "firebase/messaging";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -25,6 +26,7 @@ export const getToken = async (setTokenFound) => {
   try {
     currentToken = await messaging.getToken({ vapidKey: publicKey });
     if (currentToken) {
+      console.log('token is ', currentToken);
       setTokenFound(true);
     } else {
       setTokenFound(false);

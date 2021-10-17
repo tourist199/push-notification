@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+
+import Notification from './components/Notifications/Notifications'
+import ReactNotificationComponent from './components/Notifications/ReactNotification'
+import { onMessageListener } from './firebaseInit'
+
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+
+  const [show, setShow] = useState(false);
+  const [notification, setNotification] = useState({ title: '', body: '' });
+
+  onMessageListener()
+    .then(payload => {
+      setShow(true);
+      setNotification({
+        title: payload.notification.title,
+        body: payload.notification.body,
+      });
+    })
+    .catch(err => console.log('failed: ', err));
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {show ? (
+        <ReactNotificationComponent title={notification.title} body={notification.body} />
+      ) : (
+        <></>
+      )}
+
+      <Notification />
+
+      Test notification
     </div>
   );
 }
